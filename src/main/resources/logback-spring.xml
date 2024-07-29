@@ -9,12 +9,12 @@
 
 
     <appender name="LogToFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${base.dir}/${ACTIVE_PROFILE}/app.log</file>
+        <file>${base.dir}/app.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%d{ISO8601} [%thread] %-5level %logger{36} - L:%L %msg%n</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>logs/${ACTIVE_PROFILE}/app.log.%d{yyyy-MM}_%i</fileNamePattern>
+            <fileNamePattern>logs/app.log.%d{yyyy-MM}_%i</fileNamePattern>
             <!-- each file should be at most 30MB, keep 90 days worth of history -->
             <maxHistory>90</maxHistory>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
