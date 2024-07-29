@@ -60,7 +60,7 @@ class EmployeeGetControllerTest {
     @Test
     void testNotFoundName() throws Exception {
 
-        String name = "김클로바";
+        String name = "김클바";
 
         mockMvc
             .perform(
