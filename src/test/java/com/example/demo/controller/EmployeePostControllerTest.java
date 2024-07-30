@@ -86,6 +86,27 @@ class EmployeePostControllerTest {
     }
 
     @Test
+    void testInsertJsonStringFailType() throws Exception {
+
+        mockMvc
+            .perform(
+                post("/api/employee") // url
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .param("contentType", ContentType.CSV.name())
+                    .content("""
+                                 [
+                                 {"name": "김클로", "email":"clo@clovf.com", "tel":"010-1111-2424", "joined":"2012-01-05"},
+                                 {"name": "김클로바", "email":"clova@clovf.com", "tel":"010-1111-2525", "joined":"2022-01-05"},
+                                 {"name": "박마블","email":"md@clovf.com", "tel":"010-3535-7979", "joined": "2013-07-01" },
+                                 {"name": "홍커넥", "email":"connect@clovf.com", "tel":"010-8531-7942","joined":"2019-12-05"}
+                                 ]
+                                 """)
+            )
+            .andDo(print())
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void testInsertCsvString() throws Exception {
 
         mockMvc

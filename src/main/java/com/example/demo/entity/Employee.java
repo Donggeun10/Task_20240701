@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.sql.Date;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -13,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,9 +25,9 @@ import lombok.NoArgsConstructor;
 		indexes={
 			@Index(name = "idx_employee_n1", columnList = "name", unique = false)
 })
+@ToString
 public class Employee {
-	
-	
+
 	@JsonProperty
 	@Column(name = "name", length = 20)
 	private String name;
@@ -42,11 +45,9 @@ public class Employee {
 	
 	@JsonProperty
 	@Column(name = "joined")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	@Schema(type = "string", pattern = "yyyy-MM-dd")
 	private Date joined;
-
-
-
-
 
 }
 	

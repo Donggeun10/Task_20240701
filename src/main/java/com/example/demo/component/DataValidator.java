@@ -4,6 +4,7 @@ import com.example.demo.entity.Employee;
 import java.util.List;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -11,13 +12,12 @@ import org.springframework.stereotype.Component;
 public class DataValidator {
 
 	private boolean isTel(String tel) {
-		String reg = "^010-?(\\d{3}|\\d{4})-?\\d{4}";
+		String reg = "^010-(\\d{3}|\\d{4})-\\d{4}";
 		return Pattern.matches(reg, tel);
 	}
 
 	private boolean isEmail(String email) {
-		String reg = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
-		return Pattern.matches(reg, email);
+		return EmailValidator.getInstance().isValid(email);
 	}
 
 	public boolean isValidEmployees(List<Employee> employees) {

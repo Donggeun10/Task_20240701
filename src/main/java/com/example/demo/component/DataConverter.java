@@ -45,7 +45,6 @@ public class DataConverter {
 
 		} catch (JsonProcessingException e) {
 			throw new BadRequestParseException(e.getMessage());
-			
 		} 
 		
 	}
@@ -53,6 +52,7 @@ public class DataConverter {
 	private List<Employee> parseCsvToEmployeeList(String csvData) throws BadRequestParseException{
 
 		try {
+
 			MappingIterator<Employee> mappingIterator = csvMapper.readerFor(Employee.class).with(employeeCsvSchema()).readValues(csvData);
 			return mappingIterator.readAll();
 
@@ -89,6 +89,7 @@ public class DataConverter {
 
 			MappingIterator<Employee> mappingIterator = csvMapper.readerFor(Employee.class).with(employeeCsvSchema()).readValues(file.getInputStream());
 			return mappingIterator.readAll();
+
 		} catch (IOException e) {
 			throw new BadRequestParseException(e.getMessage());
 		}
@@ -103,5 +104,4 @@ public class DataConverter {
 	            .addColumn("joined",CsvSchema.ColumnType.STRING)
 	            .build().withoutHeader();
 	}
-
 }

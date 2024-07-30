@@ -13,9 +13,8 @@ public class DataUtil {
 	}
 
 	public static String objectToString(Object obj) {
-		ObjectMapper mapper = new ObjectMapper();
-		
 		try {
+			ObjectMapper mapper = new ObjectMapper();
 			return mapper.writeValueAsString(obj);
 		} catch (JsonProcessingException e) {
 			StackTraceElement[] stackTrace =  e.getStackTrace();
