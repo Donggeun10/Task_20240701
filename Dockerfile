@@ -7,7 +7,7 @@ COPY pom.xml .
 RUN mvn -B dependency:resolve
 
 # 2) source 복사 & package
-COPY src/main/ /build/src/main/
+COPY src/ /build/src/
 RUN mvn package
 RUN java -Djarmode=layertools -jar target/demo.jar extract
 

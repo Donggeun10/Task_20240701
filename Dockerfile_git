@@ -7,12 +7,17 @@ RUN apk update && apk --no-cache add git
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 USER appuser
 
-WORKDIR /home/appuser
+ARG USER_ID=Donggeun10
+ARG REPOSITORY_ID=Task_20240726
+ARG USER_HOME=/home/appuser
+WORKDIR $USER_HOME
 
-RUN git clone https://github.com/Donggeun10/Task_20240726.git
-WORKDIR /home/appuser/Task_20240726
+RUN git clone https://github.com/$USER_ID/$REPOSITORY_ID.git
+WORKDIR $USER_HOME/$REPOSITORY_ID
+
 RUN mvn -B dependency:resolve
 RUN mvn package -DskipTests
+
 RUN java -Djarmode=layertools -jar target/demo.jar extract
 
 FROM eclipse-temurin:21-jre-alpine
@@ -20,13 +25,14 @@ FROM eclipse-temurin:21-jre-alpine
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 USER appuser
 
-WORKDIR /home/appuser
+ARG REPOSITORY_ID=Task_20240726
+ARG USER_HOME=/home/appuser
+WORKDIR $USER_HOME
 
 # 2) Jar 복사
-COPY --from=builder /home/appuser/Task_20240726/dependencies/ ./
-COPY --from=builder /home/appuser/Task_20240726/spring-boot-loader/ ./
-COPY --from=builder /home/appuser/Task_20240726/application/ ./
+COPY --from=builder $USER_HOME/$REPOSITORY_ID/dependencies/ ./
+COPY --from=builder $USER_HOME/$REPOSITORY_ID/spring-boot-loader/ ./
+COPY --from=builder $USER_HOME/$REPOSITORY_ID/application/ ./
 
 # 3) 실행
-WORKDIR /home/appuser
 ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]

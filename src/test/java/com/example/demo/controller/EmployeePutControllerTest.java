@@ -62,7 +62,7 @@ class EmployeePutControllerTest {
                     .content(DataUtil.objectToString(employee))
             )
             .andDo(print())
-            .andExpect(status().isOk());
+            .andExpect(status().isAccepted());
     }
 
     @Test

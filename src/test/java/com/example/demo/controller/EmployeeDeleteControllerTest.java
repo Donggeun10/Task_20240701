@@ -53,7 +53,7 @@ class EmployeeDeleteControllerTest {
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
             )
             .andDo(print())
-            .andExpect(status().isOk());
+            .andExpect(status().isAccepted());
     }
 
     @Test
