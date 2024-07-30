@@ -23,12 +23,12 @@ public class ControllerAspect {
 
         String controllerName = joinPoint.getSignature().toShortString();
         if (log.isDebugEnabled() || endTime - startTime > 500) {
-            log.info("{}:{}ms params:{}", controllerName, (endTime - startTime), getParameterMap(joinPoint));
+            log.info("{}:{}ms params:{}", controllerName, (endTime - startTime), getParameters(joinPoint));
         }
         return result;
     }
 
-    private Map<String, Object> getParameterMap(final ProceedingJoinPoint joinPoint) {
+    private Map<String, Object> getParameters(final ProceedingJoinPoint joinPoint) {
         final String[] parameterNames = ((MethodSignature) joinPoint.getSignature()).getParameterNames();
         final Object[] arguments = joinPoint.getArgs();
 

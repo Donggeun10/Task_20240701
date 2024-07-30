@@ -1,0 +1,32 @@
+### build stage
+FROM maven:3.9.5-eclipse-temurin-21-alpine AS builder
+
+RUN sed 's/https/http/g' -i /etc/apk/repositories
+RUN apk update && apk --no-cache add git
+
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER appuser
+
+WORKDIR /home/appuser
+
+RUN git clone https://github.com/Donggeun10/Task_20240726.git
+WORKDIR /home/appuser/Task_20240726
+RUN mvn -B dependency:resolve
+RUN mvn package -DskipTests
+RUN java -Djarmode=layertools -jar target/demo.jar extract
+
+FROM eclipse-temurin:21-jre-alpine
+
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER appuser
+
+WORKDIR /home/appuser
+
+# 2) Jar 복사
+COPY --from=builder /home/appuser/Task_20240726/dependencies/ ./
+COPY --from=builder /home/appuser/Task_20240726/spring-boot-loader/ ./
+COPY --from=builder /home/appuser/Task_20240726/application/ ./
+
+# 3) 실행
+WORKDIR /home/appuser
+ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]

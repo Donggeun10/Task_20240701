@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.exception.BadRequestParseException;
 import com.example.demo.exception.DataSaveException;
 import com.example.demo.exception.NotFoundContentTypeException;
 import java.util.List;
@@ -37,9 +38,7 @@ public class EmployeePostController {
 	}
 	
 	@PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<String> postEmployeesFile(@RequestPart MultipartFile file, @RequestParam ContentType contentType) throws NotFoundContentTypeException, BadRequestException, DataSaveException {
-		
-		log.info("{}:{}", contentType.name(), file.getOriginalFilename());
+	public ResponseEntity<String> postEmployeesFile(@RequestPart MultipartFile file, @RequestParam ContentType contentType) throws NotFoundContentTypeException, BadRequestParseException, DataSaveException {
 
 		List<Employee> employees = dataConverter.parseRequestBodyToEmployeeList(contentType, file);
 	
@@ -49,9 +48,7 @@ public class EmployeePostController {
 	}
 	
 	@PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> postEmployeesText(@RequestBody String body, @RequestParam ContentType contentType) throws NotFoundContentTypeException, BadRequestException, DataSaveException {
-		
-		log.info("{}:{}", contentType.name(), body);
+	public ResponseEntity<String> postEmployeesText(@RequestBody String body, @RequestParam ContentType contentType) throws NotFoundContentTypeException, BadRequestParseException, DataSaveException {
 
 		List<Employee> employees = dataConverter.parseRequestBodyToEmployeeList(contentType, body);
 		

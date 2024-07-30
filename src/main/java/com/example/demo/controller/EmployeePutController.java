@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.domain.SuccessResponse;
 import com.example.demo.entity.Employee;
+import com.example.demo.exception.DataSaveException;
 import com.example.demo.exception.NotFoundEmployeeException;
 import com.example.demo.service.EmployeeUpdateService;
 import com.example.demo.util.DataUtil;
@@ -26,7 +27,7 @@ public class EmployeePutController {
     }
 
     @PutMapping(value="/tel/{tel}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> putEmployeeByTel(@PathVariable(value="tel") String tel, @RequestBody Employee employee) throws NotFoundEmployeeException {
+	public ResponseEntity<String> putEmployeeByTel(@PathVariable(value="tel") String tel, @RequestBody Employee employee) throws NotFoundEmployeeException, DataSaveException {
 
 		employeeUpdateService.updateEmployeeByTel(tel, employee);
 

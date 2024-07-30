@@ -2,6 +2,7 @@ package com.example.demo.component;
 
 import com.example.demo.entity.Employee;
 import com.example.demo.enums.ContentType;
+import com.example.demo.exception.BadRequestParseException;
 import com.example.demo.exception.NotFoundContentTypeException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -12,7 +13,6 @@ import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import java.io.IOException;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,7 +28,7 @@ public class DataConverter {
         this.objectMapper = objectMapper;
     }
 
-    public List<Employee> parseRequestBodyToEmployeeList(ContentType contentType, String body) throws BadRequestException, NotFoundContentTypeException {
+    public List<Employee> parseRequestBodyToEmployeeList(ContentType contentType, String body) throws BadRequestParseException, NotFoundContentTypeException {
 
         return switch (contentType) {
             case JSON -> parseJsonToEmployeeList(body);
@@ -37,32 +37,32 @@ public class DataConverter {
         };
 	}
 
-	private List<Employee> parseJsonToEmployeeList(String jsonData) throws BadRequestException{
+	private List<Employee> parseJsonToEmployeeList(String jsonData) throws BadRequestParseException{
 
 		try {
 
 			return objectMapper.readValue(jsonData, new TypeReference<List<Employee>>() {});
 
 		} catch (JsonProcessingException e) {
-			throw new BadRequestException(e.getMessage());
+			throw new BadRequestParseException(e.getMessage());
 			
 		} 
 		
 	}
 
-	private List<Employee> parseCsvToEmployeeList(String csvData) throws BadRequestException{
+	private List<Employee> parseCsvToEmployeeList(String csvData) throws BadRequestParseException{
 
 		try {
 			MappingIterator<Employee> mappingIterator = csvMapper.readerFor(Employee.class).with(employeeCsvSchema()).readValues(csvData);
 			return mappingIterator.readAll();
 
 		}catch (Exception e){
-			throw new BadRequestException(e.getMessage());
+			throw new BadRequestParseException(e.getMessage());
 		}
 
 	}
 
-	public List<Employee> parseRequestBodyToEmployeeList(ContentType contentType, MultipartFile file) throws BadRequestException, NotFoundContentTypeException {
+	public List<Employee> parseRequestBodyToEmployeeList(ContentType contentType, MultipartFile file) throws BadRequestParseException, NotFoundContentTypeException {
 
 		return switch (contentType) {
 			case JSON -> parseJsonToEmployeeList(file);
@@ -72,25 +72,25 @@ public class DataConverter {
 
 	}
 
-	private List<Employee> parseJsonToEmployeeList(MultipartFile file) throws BadRequestException {
+	private List<Employee> parseJsonToEmployeeList(MultipartFile file) throws BadRequestParseException {
 
 		try {
 
 			return objectMapper.readValue(file.getInputStream(), new TypeReference<List<Employee>>() {});
 
 		} catch (Exception e) {
-			throw new BadRequestException(e.getMessage());
+			throw new BadRequestParseException(e.getMessage());
 		}
 	}
 
-	private List<Employee> parseCsvToEmployeeList(MultipartFile file) throws BadRequestException {
+	private List<Employee> parseCsvToEmployeeList(MultipartFile file) throws BadRequestParseException {
 
 		try {
 
 			MappingIterator<Employee> mappingIterator = csvMapper.readerFor(Employee.class).with(employeeCsvSchema()).readValues(file.getInputStream());
 			return mappingIterator.readAll();
 		} catch (IOException e) {
-			throw new BadRequestException(e.getMessage());
+			throw new BadRequestParseException(e.getMessage());
 		}
 
 	}

@@ -1,15 +1,18 @@
 package com.example.demo.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.demo.enums.ContentType;
+import java.io.FileInputStream;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
@@ -38,6 +41,27 @@ class EmployeePostControllerTest {
             )
             .andDo(print()) // api 수행내역 로그 출력
             .andExpect(status().isCreated()); // response status 201 검증
+    }
+
+    @Test
+    void testInsertJsonFile() throws Exception {
+
+        String fileName = "src/test/resources/employees.json";
+        FileInputStream fileInputStream = new FileInputStream(fileName);
+
+        MockMultipartFile jsonFile = new MockMultipartFile(
+            "file", //name
+            fileInputStream
+        );
+
+        mockMvc
+            .perform(
+                multipart("/api/employee")
+                    .file(jsonFile)
+                    .param("contentType", ContentType.JSON.name())
+                )
+                .andDo(print())
+                .andExpect(status().isCreated());
     }
 
     @Test
@@ -75,8 +99,46 @@ class EmployeePostControllerTest {
                                  홍길동, kildong.hong@clovf.com, 010-1234-5678, 2015-08-15
                                  """)
             )
-            .andDo(print()) // api 수행내역 로그 출력
-            .andExpect(status().isCreated()); // response status 201 검증
+            .andDo(print())
+            .andExpect(status().isCreated());
     }
 
+    @Test
+    void testInsertCsvFile() throws Exception {
+
+        String fileName = "src/test/resources/employees.csv";
+        FileInputStream fileInputStream = new FileInputStream(fileName);
+
+        MockMultipartFile jsonFile = new MockMultipartFile(
+            "file", //name
+            fileInputStream
+        );
+
+        mockMvc
+            .perform(
+                multipart("/api/employee")
+                    .file(jsonFile)
+                    .param("contentType", ContentType.CSV.name())
+            )
+            .andDo(print())
+            .andExpect(status().isCreated());
+    }
+
+    @Test
+    void testInsertCsvStringFail() throws Exception {
+
+        mockMvc
+            .perform(
+                post("/api/employee") // url
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .param("contentType", ContentType.CSV.name())
+                    .content("""
+                                 김철수, charles@clovf.com, 010-7531-24681, 2018-03-07
+                                 박영희, matilda@clovi.com, 010-8765-4321, 2021-04-28
+                                 홍길동, kildong.hong@clovf.com, 010-1234-5678, 2015-08-15
+                                 """)
+            )
+            .andDo(print())
+            .andExpect(status().isInternalServerError());
+    }
 }

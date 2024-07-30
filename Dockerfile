@@ -25,5 +25,3 @@ COPY --from=builder /build/application/ ./
 
 # 3) 실행
 ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
-
-#docker build -t demo-api:local .  && docker run -p 9090:8080  -e"SPRING_PROFILES_ACTIVE=local"  demo-api:local

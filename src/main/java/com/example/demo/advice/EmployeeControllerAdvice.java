@@ -2,20 +2,18 @@ package com.example.demo.advice;
 
 
 
+import com.example.demo.domain.ErrorResponse;
+import com.example.demo.exception.BadRequestNoContentPageException;
+import com.example.demo.exception.BadRequestParseException;
 import com.example.demo.exception.DataSaveException;
 import com.example.demo.exception.NotFoundContentTypeException;
-import org.apache.coyote.BadRequestException;
+import com.example.demo.exception.NotFoundEmployeeException;
+import com.example.demo.util.DataUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import com.example.demo.domain.ErrorResponse;
-import com.example.demo.exception.BadRequestNoContentPageException;
-import com.example.demo.exception.NotFoundEmployeeException;
-import com.example.demo.util.DataUtil;
-
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestControllerAdvice
@@ -54,12 +52,12 @@ public class EmployeeControllerAdvice {
 
 	}
 	
-	@ExceptionHandler(BadRequestException.class)
-	public ResponseEntity<String> serverException(BadRequestException badRequestException) {
+	@ExceptionHandler(BadRequestParseException.class)
+	public ResponseEntity<String> serverException(BadRequestParseException badRequestParseException) {
 		
 		ErrorResponse errorRes = new ErrorResponse("ContentType과 일치하지 않은 우형의 데이터가 전송되었습니다. ");
 		
-		log.error(DataUtil.makeErrorLogMessage(badRequestException));	
+		log.error(DataUtil.makeErrorLogMessage(badRequestParseException));
 		
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(DataUtil.objectToString(errorRes));	
 		
