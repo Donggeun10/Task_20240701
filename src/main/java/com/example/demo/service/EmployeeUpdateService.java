@@ -22,14 +22,20 @@ public class EmployeeUpdateService {
         this.dataValidator = dataValidator;
     }
 
-	@Transactional
+	@Transactional(rollbackFor = {NotFoundEmployeeException.class, DataSaveException.class})
 	public void updateEmployeeByTel(String tel, Employee employee) throws NotFoundEmployeeException, DataSaveException {
-		
-		if(dataValidator.isValidEmployee(employee)) {
+
+		if (dataValidator.isValidEmployee(employee)) {
+
 			if (tel.equals(employee.getTel())) {
 				Optional<Employee> data = employeeRepository.fetchByTel(tel);
+
 				if (data.isPresent()) {
-					employeeRepository.save(employee);
+					try {
+						employeeRepository.saveAndFlush(employee);
+					} catch (Exception e) {
+						throw new DataSaveException(e.getMessage());
+					}
 				} else {
 					throw new NotFoundEmployeeException(String.format("요청한 전화번호(%s)의 직원정보가 없습니다.", tel));
 				}

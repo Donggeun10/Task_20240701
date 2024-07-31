@@ -85,4 +85,24 @@ class EmployeePutControllerTest {
             .andExpect(status().isNotFound());
     }
 
+    @Test
+    void testUpdateByTelFailOverflow() throws Exception {
+
+        String tel = "010-1111-2424";
+        Employee employee = Employee.builder()
+            .name("김클로김클로김클로김클로김클로김클로김클로김클로김클로")
+            .email("clo@clovf.com")
+            .tel("010-1111-2424")
+            .joined(Date.valueOf("2012-02-05")).build();
+
+        mockMvc
+            .perform(
+                put("/api/employee/tel/"+tel) // url
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .content(DataUtil.objectToString(employee))
+            )
+            .andDo(print())
+            .andExpect(status().isInternalServerError());
+    }
+
 }

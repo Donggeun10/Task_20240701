@@ -8,6 +8,7 @@ import com.example.demo.exception.DataSaveException;
 import com.example.demo.exception.NotFoundContentTypeException;
 import com.example.demo.service.EmployeeCreateService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -44,7 +45,12 @@ public class EmployeePostController {
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
-	@Operation(summary = "직원 정보 등록", description = " \\<textarea\\>\\</textarea\\>에서 직접 데이터를 입력한 경우 application/json으로 직원 정보 등록")
+	@Operation(summary = "직원 정보 등록", description = " \\<textarea\\>\\</textarea\\>에서 직접 데이터를 입력한 경우 application/json으로 직원 정보 등록", responses = {
+		@ApiResponse( responseCode = "201", description = "요청 데이터가 정상적으로 저장됨" ),
+		@ApiResponse( responseCode = "400", description = "데이터 분석 중 오류가 발생함" ),
+		@ApiResponse( responseCode = "404", description = "식별할 수 없는 유형의 데이터를 전송함" ),
+		@ApiResponse( responseCode = "500", description = "데이터 저장 중 오류 발생함" )
+	})
 	@PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> postEmployeesText(@RequestBody String body, @RequestParam ContentType contentType) throws NotFoundContentTypeException, BadRequestParseException, DataSaveException {
 

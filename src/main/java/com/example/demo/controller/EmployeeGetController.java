@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,28 +28,39 @@ public class EmployeeGetController {
 		this.employeeReadService = employeeReadService;
 	}
 
-	@Operation(summary = "모든 직원 목록 조회")
+	@Operation(summary = "모든 직원 목록 조회", responses = {
+		@ApiResponse( responseCode = "200", description = "조회된 사용자 정보를 반환함.")
+	})
 	@GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> getAllEmployees(){
 		
 		return ResponseEntity.ok(DataUtil.objectToString(employeeReadService.selectAllEmployees()));
 	}
 
-	@Operation(summary = "직원 이름으로 조회")
+	@Operation(summary = "직원 이름으로 조회", responses = {
+		@ApiResponse( responseCode = "200", description = "조회된 사용자 정보를 반환함."),
+		@ApiResponse( responseCode = "404", description = "사용자 정보가 없음" )
+	})
 	@GetMapping(value = "/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> getEmployeeByName(@PathVariable String name) throws NotFoundEmployeeException{
 		
 		return ResponseEntity.ok(DataUtil.objectToString(employeeReadService.selectEmployeeByName(name)));
 	}
 
-	@Operation(summary = "직원 전화번호로 조회")
+	@Operation(summary = "직원 전화번호로 조회", responses = {
+		@ApiResponse( responseCode = "200", description = "조회된 사용자 정보를 반환함."),
+		@ApiResponse( responseCode = "404", description = "사용자 정보가 없음" )
+	})
 	@GetMapping(value = "/tel/{tel}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> getEmployeeByTel(@PathVariable String tel) throws NotFoundEmployeeException{
 
 		return ResponseEntity.ok(DataUtil.objectToString(employeeReadService.selectEmployeeByTel(tel)));
 	}
 
-	@Operation(summary = "페이지별 직원 목록 조회")
+	@Operation(summary = "페이지별 직원 목록 조회", responses = {
+		@ApiResponse( responseCode = "200", description = "조회된 사용자 정보를 반환함"),
+		@ApiResponse( responseCode = "400", description = "요청한 페이지에 해당하는 데이터가 없음" )
+	})
 	@GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> getEmployeesByPage(@RequestParam int page, @RequestParam int pageSize) throws BadRequestNoContentPageException{
 		
