@@ -34,16 +34,16 @@
 ### 5.1. CSV
 - csv 는 헤더 항목이 없어야 함.
 ```
-김철수, charles@clovf.com, 010-7531-2468, 2018-03-07
-박영희, matilda@clovi.com, 010-8765-4321, 2021-04-28
-홍길동, kildong.hong@clovf.com, 010-1234-5678, 2015-08-15
+김철수, charles@clova.com, 010-7531-2468, 2018-03-07
+박영희, matilda@clova.com, 010-8765-4321, 2021-04-28
+홍길동, kildong.hong@clova.com, 010-1234-5678, 2015-08-15
 ```
 ### 5.2. JSON
 ```
 [
-{"name": "김클로", "email":"clo@clovf.com", "tel":"010-1111-2424", "joined":"2012-01-05"},
-{"name": "박마블","email":"md@clovf.com", "tel":"010-3535-7979", "joined": "2013-07-01" },
-{"name": "홍커넥", "email":"connect@clovf.com", "tel":"010-8531-7942","joined":"2019-12-05"}
+{"name": "김클로", "email":"clo@clova.com", "tel":"010-1111-2424", "joined":"2012-01-05"},
+{"name": "박마블","email":"md@clova.com", "tel":"010-3535-7979", "joined": "2013-07-01" },
+{"name": "홍커넥", "email":"connect@clova.com", "tel":"010-8531-7942","joined":"2019-12-05"}
 ]
 ```
 
