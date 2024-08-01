@@ -23,7 +23,7 @@ import lombok.ToString;
 @Entity
 @Table(name="TB_EMPLOYEE",
 		indexes={
-			@Index(name = "idx_employee_n1", columnList = "name", unique = false)
+			@Index(name = "idx_employee_n1", columnList = "name")
 })
 @ToString
 public class Employee {

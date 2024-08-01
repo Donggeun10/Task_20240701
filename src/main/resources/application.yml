@@ -6,3 +6,8 @@ springdoc:
     packagesToScan: com.example.demo.controller
     swagger-ui:
         operations-sorter: alpha
+
+
+axon:
+    axonserver:
+        enabled: false

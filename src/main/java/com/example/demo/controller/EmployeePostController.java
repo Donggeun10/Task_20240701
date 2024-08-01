@@ -45,7 +45,7 @@ public class EmployeePostController {
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
-	@Operation(summary = "직원 정보 등록", description = " \\<textarea\\>\\</textarea\\>에서 직접 데이터를 입력한 경우 application/json으로 직원 정보 등록", responses = {
+	@Operation(summary = "직원 정보 등록", description = " \\<textarea\\>\\</textarea\\>에서 직접 데이터를 입력한 경우 application/json으로 직원 정보 등록, CSV 는 header 를 입력하지 않습니다.", responses = {
 		@ApiResponse( responseCode = "201", description = "요청 데이터가 정상적으로 저장됨" ),
 		@ApiResponse( responseCode = "400", description = "데이터 분석 중 오류가 발생함" ),
 		@ApiResponse( responseCode = "404", description = "식별할 수 없는 유형의 데이터를 전송함" ),

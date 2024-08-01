@@ -1,15 +1,16 @@
 package com.example.demo.service;
 
+import com.example.demo.cqrs.query.EmployeeByNameQuery;
+import com.example.demo.cqrs.query.EmployeeByPagingQuery;
+import com.example.demo.cqrs.query.EmployeeByTelQuery;
 import com.example.demo.entity.Employee;
 import com.example.demo.exception.BadRequestNoContentPageException;
 import com.example.demo.exception.NotFoundEmployeeException;
 import com.example.demo.repository.EmployeeRespository;
 import java.util.List;
-import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.axonframework.messaging.responsetypes.ResponseTypes;
+import org.axonframework.queryhandling.QueryGateway;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,47 +20,30 @@ import org.springframework.transaction.annotation.Transactional;
 public class EmployeeReadService {
 	
 	private final EmployeeRespository employeeRepository;
+	private final QueryGateway queryGateway;
 
-    public EmployeeReadService(EmployeeRespository employeeRepository) {
+    public EmployeeReadService(EmployeeRespository employeeRepository, QueryGateway queryGateway) {
         this.employeeRepository = employeeRepository;
+        this.queryGateway = queryGateway;
     }
 
     public Employee selectEmployeeByName(String name) throws NotFoundEmployeeException {
 
-		Optional<Employee> employeeOpt = employeeRepository.findByName(name);
-		
-		if(employeeOpt.isPresent()) {
-			return employeeOpt.get();
-		} else {
-			throw new NotFoundEmployeeException(String.format("요청한 이름(%s)의 직원정보가 없습니다.", name));
-		}
-		
+		return queryGateway.query(new EmployeeByNameQuery(name), Employee.class).join();
+
 	}
 
 	public List<Employee> selectEmployeeByTel(String tel) throws NotFoundEmployeeException {
 
-		List<Employee> employees = employeeRepository.findByTelStartingWith(tel);
-
-		if(employees.isEmpty()) {
-			throw new NotFoundEmployeeException(String.format("요청한 전화번호(%s)로 시작하는 직원 정보가 없습니다.", tel));
-		} else {
-			return employees;
-		}
+		return queryGateway.query(new EmployeeByTelQuery(tel), ResponseTypes.multipleInstancesOf(Employee.class)).join();
 
 	}
 
 	public List<Employee> selectEmployeeListByPage(int page, int pageSize) throws BadRequestNoContentPageException {
 		
-		PageRequest pageRequest = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "name")); 
-		Page<Employee> employeeList = employeeRepository.findAll(pageRequest);
-		if(employeeList.hasContent()) {
-			return employeeList.toList();
-		} else {
-			throw new BadRequestNoContentPageException(String.format("요청한 페이지(%d, pageSize:%d)의 데이터는 존재하지 않습니다. ", page, pageSize));
-		}
+		return queryGateway.query(new EmployeeByPagingQuery(page, pageSize), ResponseTypes.multipleInstancesOf(Employee.class)).join();
 
 	}
-
 
 	public List<Employee> selectAllEmployees() {
 

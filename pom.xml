@@ -10,7 +10,6 @@
 	</parent>
 	<groupId>com.example</groupId>
 	<artifactId>demo</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>homework</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
@@ -60,6 +59,13 @@
 	      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 	      <version>2.6.0</version>
 	   	</dependency>
+
+		<dependency>
+			<groupId>org.axonframework</groupId>
+			<artifactId>axon-spring-boot-starter</artifactId>
+			<version>4.10.0</version>
+		</dependency>
+
 	   	<dependency>
 		    <groupId>com.fasterxml.jackson.dataformat</groupId>
 		    <artifactId>jackson-dataformat-csv</artifactId>

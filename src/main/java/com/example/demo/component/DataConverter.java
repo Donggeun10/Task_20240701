@@ -33,7 +33,7 @@ public class DataConverter {
         return switch (contentType) {
             case JSON -> parseJsonToEmployeeList(body);
             case CSV -> parseCsvToEmployeeList(body);
-            default -> throw new NotFoundContentTypeException("지원하지 않는 형식(" + contentType + ")의 데이터 입니다.");
+            default -> throw new NotFoundContentTypeException(String.format("지원하지 않는 형식(%s)의 데이터 입니다.", contentType));
         };
 	}
 
@@ -67,7 +67,7 @@ public class DataConverter {
 		return switch (contentType) {
 			case JSON -> parseJsonToEmployeeList(file);
 			case CSV -> parseCsvToEmployeeList(file);
-			default -> throw new NotFoundContentTypeException("지원하지 않는 형식(" + contentType + ")의 데이터 입니다.");
+			default -> throw new NotFoundContentTypeException(String.format("지원하지 않는 형식(%s)의 데이터 입니다.", contentType));
 		};
 
 	}
