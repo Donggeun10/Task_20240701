@@ -77,7 +77,7 @@ class EmployeeGetControllerTest {
 
         mockMvc
             .perform(
-                get("/api/employee/tel/"+tel) // url
+                get("/api/employees/tel/"+tel) // url
             )
             .andDo(print())
             .andExpect(status().isOk());
@@ -91,7 +91,7 @@ class EmployeeGetControllerTest {
 
         mockMvc
             .perform(
-                get("/api/employee/tel/"+tel) // url
+                get("/api/employees/tel/"+tel) // url
             )
             .andDo(print())
             .andExpect(status().isNotFound());

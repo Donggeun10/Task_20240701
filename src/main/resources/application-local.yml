@@ -10,11 +10,11 @@ server:
 spring:
     application:
         name: application-local
-    datasource: 
-        driver-class-name: org.h2.Driver
+    datasource:
+        driverClassName: org.h2.Driver
         url: jdbc:h2:mem:addressDB;DB_CLOSE_ON_EXIT=FALSE;LOCK_TIMEOUT=3000
         username: sa
-        password: sa
+        password: 2df3652a15011bd660b3bc17807e4f3b762ff755d266580be698e0e49a111ca8
         hikari:
           pool-name: address-pool
     jpa:

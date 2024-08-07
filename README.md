@@ -1,5 +1,14 @@
 # Backend Server
 - Spring Boot 기반의 RESTful API 서버 구현
+- RestControllerAdvice 와 ExceptionHandler 를 이용한 예외 처리
+- H2 Database 를 이용한 데이터 저장 및 조회
+- Spring Data JPA 를 이용한 데이터 CRUD
+- LockModeType.PESSIMISTIC_WRITE 를 이용한 데이터 동시성 제어
+- Springdoc-openapi 를 이용한 API 문서화
+- Jackson-dataformat-csv 를 이용한 CSV 파일 파싱
+- Lombok 을 이용한 코드 간소화
+- Docker 를 이용한 이미지 생성 및 실행
+- Aspect 와  @Around 를 이용한 로깅
 
 ## 1. Frameworks And Tools
 - JDK 21
@@ -16,10 +25,11 @@
 
 ## 3. 주요 Endpoints
 - GET /api/employees
-- GET /api/employees/{name}
+- GET /api/employee/{name}
 - GET /api/employees/tel/{tel}
-- POST /api/employees
-- DELETE /api/employees/tel/{tel}
+- POST /api/employee
+- DELETE /api/employee/tel/{tel}
+- PUT /api/employee/tel/{tel}
 
 ## 4. 데이터 규격
 ### 4.1. Employee
